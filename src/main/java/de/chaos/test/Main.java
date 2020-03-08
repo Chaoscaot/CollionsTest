@@ -22,7 +22,7 @@ public class Main extends Canvas {
     public Main(){
 
         block1 = new Block( 100 , 20, 0, 1);
-        block2 = new Block(600 , 50, 0.01 , 100);
+        block2 = new Block(600 , 50, 0.01 , 1);
 
         frame = new JFrame();
         frame.setTitle("LightChess");
@@ -43,7 +43,7 @@ public class Main extends Canvas {
             while (true) {
                 Main.main.tick();
                 try {
-                    Thread.sleep(1000/60);
+                    Thread.sleep(1000/200);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();;
                 }
@@ -52,6 +52,11 @@ public class Main extends Canvas {
         Runnable runnable1 = () ->{
             while (true){
                 Main.main.draw();
+                try {
+                    Thread.sleep(1000/60);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();;
+                }
             }
         };
         Thread t = new Thread(runnable);

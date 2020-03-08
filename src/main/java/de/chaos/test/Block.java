@@ -22,7 +22,7 @@ public class Block extends Rectangle {
     }
 
     public void reverse() {
-        this.v *= -1;
+        this.v = this.v * -1;
     }
 
     public double bounce(Block other){
