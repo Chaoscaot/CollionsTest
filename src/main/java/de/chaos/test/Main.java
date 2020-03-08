@@ -10,19 +10,19 @@ public class Main extends Canvas {
     public static Block block2;
     public static JFrame frame;
 
-    public static Main main;
+    public static Main mainInstance;
 
     static int count = 0;
     static int digits = 2;
     static int timeSteps = 1 * (digits - 1);
 
     public static void main(String[] args) {
-        main = new Main();
+        mainInstance = new Main();
     }
-    public Main(){
 
+    public Main() {
         block1 = new Block( 100 , 20, 0, 1);
-        block2 = new Block(600 , 50, 0.01 , 100);
+        block2 = new Block(600 , 50, 0.01 , 1);
 
         frame = new JFrame();
         frame.setTitle("LightChess");
@@ -39,11 +39,12 @@ public class Main extends Canvas {
         frame.validate();
 
         Runnable runnable = () -> {
-            int i = 0;
             while (true) {
-                Main.main.tick();
+                if (Main.mainInstance != null) {
+                    Main.mainInstance.tick();
+                }
                 try {
-                    Thread.sleep(1000/60);
+                    Thread.sleep(1000/200);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();;
                 }
@@ -51,7 +52,14 @@ public class Main extends Canvas {
         };
         Runnable runnable1 = () ->{
             while (true){
-                Main.main.draw();
+                if (Main.mainInstance != null) {
+                    Main.mainInstance.draw();
+                }
+                try {
+                    Thread.sleep(1000/60);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();;
+                }
             }
         };
         Thread t = new Thread(runnable);
@@ -64,6 +72,9 @@ public class Main extends Canvas {
 
     public void tick(){
         for (int i = 0; i < timeSteps; i++) {
+            block1.update(timeSteps);
+            block2.update(timeSteps);
+
             if (block1.collide(block2)) {
                 double v1 = block1.bounce(block2);
                 double v2 = block2.bounce(block1);
@@ -76,11 +87,8 @@ public class Main extends Canvas {
                 block1.reverse();
                 count++;
             }
-
-            block1.update();
-            block2.update();
         }
-        System.out.println(count);
+        //System.out.println(count);
     }
     public void draw(){
         BufferStrategy bs = getBufferStrategy();

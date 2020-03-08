@@ -2,15 +2,18 @@ package de.chaos.test;
 
 import java.awt.*;
 
-public class Block extends Rectangle {
+public class Block {
 
-    double v;
-    public int m;
+    public double v;
+    public double m;
+    private double x;
+    private int width;
 
-    public Block(int x, int width, double v, int m) {
-        super(x, 0, width, width);
-        this.v = v*-1;
+    public Block(double v, double m, double x, int width) {
+        this.v = v * -1;
         this.m = m;
+        this.x = x;
+        this.width = width;
     }
 
     public boolean collide(Block other){
@@ -32,12 +35,12 @@ public class Block extends Rectangle {
         return newV;
     }
 
-    public void update(){
-        this.x += this.v;
+    public void update(int timestep) {
+        this.x += this.v / (double)timestep;
     }
 
     public void draw(Graphics2D g){
         g.setColor(Color.gray);
-        g.fillRect(x,y, width, height);
+        g.fillRect((int)x,100, width, width);
     }
 }
