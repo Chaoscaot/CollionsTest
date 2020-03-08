@@ -3,6 +3,7 @@ package de.chaos.test;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.math.BigInteger;
 
 public class Main extends Canvas {
 
@@ -12,9 +13,11 @@ public class Main extends Canvas {
 
     public static Main mainInstance;
 
-    static int count = 0;
-    static int digits = 2;
-    static int timeSteps = 1 * (digits - 1);
+    private static double firstDistance;
+
+    static BigInteger count = BigInteger.ZERO;
+    static int digits = 6;
+    static int timeSteps = (int)Math.pow(10, digits);
 
     public static void main(String[] args) {
         mainInstance = new Main();
@@ -22,7 +25,9 @@ public class Main extends Canvas {
 
     public Main() {
         block1 = new Block( 100 , 20, 0, 1);
-        block2 = new Block(600 , 50, 0.01 , 1);
+        block2 = new Block(600 , 50, 1 , Math.pow(100, digits));
+
+        firstDistance = block1.distance(block2);
 
         frame = new JFrame();
         frame.setTitle("LightChess");
@@ -70,26 +75,29 @@ public class Main extends Canvas {
         t2.start();
     }
 
-    public void tick(){
-        for (int i = 0; i < timeSteps; i++) {
-            block1.update(timeSteps);
-            block2.update(timeSteps);
+    public void tick() {
+        int t = (int)(timeSteps * (1 / block1.distance(block2)));
+        System.out.println(t);
+
+        for (int i = 0; i < t; i++) {
+            block1.update(t);
+            block2.update(t);
 
             if (block1.collide(block2)) {
                 double v1 = block1.bounce(block2);
                 double v2 = block2.bounce(block1);
                 block1.v = v1;
                 block2.v = v2;
-                count++;
+                count = count.add(BigInteger.ONE);
             }
 
             if (block1.hitWall()) {
                 block1.reverse();
-                count++;
+                count = count.add(BigInteger.ONE);
             }
         }
-        //System.out.println(count);
     }
+
     public void draw(){
         BufferStrategy bs = getBufferStrategy();
         if(bs == null){
@@ -104,6 +112,8 @@ public class Main extends Canvas {
 
         block1.draw(g);
         block2.draw(g);
+
+        g.drawString("Collisions: " + count, 10, 100);
 
         g.dispose();
         bs.show();

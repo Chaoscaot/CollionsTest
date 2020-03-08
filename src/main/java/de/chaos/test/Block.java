@@ -9,11 +9,15 @@ public class Block {
     private double x;
     private int width;
 
-    public Block(double v, double m, double x, int width) {
+    public Block(double x, int width, double v, double m) {
         this.v = v * -1;
         this.m = m;
         this.x = x;
         this.width = width;
+    }
+
+    public double distance(Block block) {
+        return Math.sqrt((this.x - block.x) * (this.x - block.x));
     }
 
     public boolean collide(Block other){
@@ -41,6 +45,6 @@ public class Block {
 
     public void draw(Graphics2D g){
         g.setColor(Color.gray);
-        g.fillRect((int)x,100, width, width);
+        g.fillRect((int)x,0, width, width);
     }
 }
