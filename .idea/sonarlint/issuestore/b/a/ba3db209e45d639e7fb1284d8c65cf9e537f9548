@@ -1,0 +1,21 @@
+
+‡"squid:ClassVariableVisibilityCheck
+"RMake block2 a static final constant or non-public and provide accessors if needed.(ÒÄ¹8ñ¸àº‹.
+Jsquid:S1444
+",Make this "public static block2" field final(ÒÄ¹8ñ¸àº‹.
+Œ"squid:ClassVariableVisibilityCheck	"RMake block1 a static final constant or non-public and provide accessors if needed.(ƒ”Şúÿÿÿÿ8ñ¸àº‹.
+Fsquid:S3010"#Remove this assignment of "block2".(†¡ğïûÿÿÿÿ8•Ìıº‹.
+Ysquid:S2696H"6Make the enclosing method "static" or remove this set.(ëæûÿÿÿÿÿ8ÌÈñº‹.
+[
+squid:S106S"9Replace this use of System.out or System.err by a logger.(³ğ¸ûÿÿÿÿ8¬­»‹.
+Nsquid:S1444"+Make this "public static frame" field final(¹å‘şøÿÿÿÿ8‘àº‹.
+Esquid:S3010""Remove this assignment of "frame".(ŞËÎ²ÿÿÿÿÿ8ùÕåº‹.
+Osquid:S1444	",Make this "public static block1" field final(ƒ”Şúÿÿÿÿ8ñ¸àº‹.
+Asquid:S3010"#Remove this assignment of "block1".(æå¶…8Î…üº‹.
+Msquid:EmptyStatementUsageCheck0"Remove this empty statement.(»êö8Ì¼ãº‹.
+Msquid:S1444"*Make this "public static main" field final(Ù¨€¤şÿÿÿÿ8¼±òº‹.
+Isquid:S1481*"&Remove this unused "i" local variable.(ùó›Ìøÿÿÿÿ8œÚ„»‹.
+Ysquid:S2696M"6Make the enclosing method "static" or remove this set.(ëæûÿÿÿÿÿ8ÌÈñº‹.
+‹"squid:ClassVariableVisibilityCheck"QMake frame a static final constant or non-public and provide accessors if needed.(¹å‘şøÿÿÿÿ8‘àº‹.
+Š"squid:ClassVariableVisibilityCheck"PMake main a static final constant or non-public and provide accessors if needed.(Ù¨€¤şÿÿÿÿ8¼±òº‹.
+~squid:S1845"`Rename method "main" to prevent any misunderstanding/clash with field "main" defined on line 13.(Çµí‘8¼±òº‹.
