@@ -17,7 +17,7 @@ public class Block {
     }
 
     public double distance(Block block) {
-        return Math.sqrt((this.x - block.x) * (this.x - block.x));
+        return Math.sqrt(((this.x + this.width) - block.x) * ((this.x + this.width) - block.x));
     }
 
     public boolean collide(Block other){

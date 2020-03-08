@@ -2,20 +2,23 @@ package de.chaos.test;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.math.BigInteger;
 
 public class Main extends Canvas {
 
-    public static Block block1;
-    public static Block block2;
+    public Block block1;
+    public Block block2;
     public static JFrame frame;
 
     public static Main mainInstance;
 
 
     static BigInteger count = BigInteger.ZERO;
-    static int digits = 12;
+    static int digits = 0;
     static long timeSteps = (long)Math.pow(10, digits);
 
     public static void main(String[] args) {
@@ -23,12 +26,11 @@ public class Main extends Canvas {
     }
 
     public Main() {
-        block1 = new Block( 100 , 20, 0, 1);
-        block2 = new Block(block1.x + block1.width * 5, 20 + digits * 20, 1 , Math.pow(100, digits));
+        restart();
 
         frame = new JFrame();
-        frame.setTitle("LightChess");
-        frame.setName("LightChess");
+        frame.setTitle("Collisions PI");
+        frame.setName("Collisions PI");
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -39,6 +41,34 @@ public class Main extends Canvas {
         frame.setVisible(true);
         frame.add(this);
         frame.validate();
+        frame.setFocusTraversalKeysEnabled(false);
+
+        addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyChar() == '+') {
+                    digits++;
+                    Main.mainInstance.restart();
+                } else if (e.getKeyChar() == '-') {
+                    digits--;
+                    if (digits < 0) {
+                        digits = 0;
+                    }
+                    if (digits > 38) {
+                        digits = 0;
+                    }
+                    Main.mainInstance.restart();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+        });
 
         Runnable runnable = () -> {
             while (true) {
@@ -64,6 +94,7 @@ public class Main extends Canvas {
                 }
             }
         };
+
         Thread t = new Thread(runnable);
         t.setName("Game-Tick");
         t.start();
@@ -72,17 +103,33 @@ public class Main extends Canvas {
         t2.start();
     }
 
+    private boolean breakLoop = false;
+    private long timeStepsForDraw = 0;
+
+    private void restart() {
+        count = BigInteger.ZERO;
+        timeSteps = (long)Math.pow(10, digits);
+
+        block1 = new Block( 100 , 20, 0, 1);
+        block2 = new Block(block1.x + (20 + digits * 20) + 20, 20 + digits * 20, 1 , Math.pow(100, digits));
+        breakLoop = true;
+    }
+
     public void tick() {
-        int addition = 0;
-        if (digits == 2) {
-            addition++;
-        }
-        long t = (long)(timeSteps * (1 / block1.distance(block2)) * (digits + addition));
+        long t = (long)(timeSteps * (1 / block1.distance(block2)) * (digits + 1));
         if (t <= 0) {
             t = 1;
         }
+        if (t > timeSteps) {
+            t = timeSteps;
+        }
+        timeStepsForDraw = t;
 
         for (long i = 0; i < t; i++) {
+            if (breakLoop) {
+                breakLoop = false;
+                break;
+            }
             block1.update(t);
             block2.update(t);
 
@@ -129,20 +176,42 @@ public class Main extends Canvas {
         g.drawString("            " + pi.substring(0, digits + 1), 10, 120 + height);
         g.setColor(Color.gray);
         g.drawString("            " + repeat(' ', digits + 1) + pi.substring(digits + 1), 10, 120 + height);
-        g.drawString("Timesteps:  " + (long)(timeSteps * (1 / block1.distance(block2)) * digits), 10, 140 + height);
-        g.drawString("            " + timeSteps, 10, 160 + height);
+
+        String s = formatNumber((long)(timeSteps * (1 / block1.distance(block2)) * (digits + 1)));
+        String t = formatNumber(timeSteps);
+        g.drawString("Timesteps:  " + repeat(' ', t.length() - s.length()) + s, 10, 140 + height);
+        g.drawString("            " + t, 10, 160 + height);
         g.drawString("Digits:     " + digits, 10, 180 + height);
 
         g.dispose();
         bs.show();
     }
 
-    private String repeat(char c, int repeat) {
+    private String repeat(char c, long repeat) {
         StringBuilder st = new StringBuilder();
-        for (int i = 0; i < repeat; i++) {
+        for (long i = 0; i < repeat; i++) {
             st.append(c);
         }
         return st.toString();
+    }
+
+    public static String formatNumber(long l) {
+        return addCommas(l + "");
+    }
+
+    private static String addCommas(String s) {
+        if (s.length() <= 1) {
+            return s;
+        }
+        char[] chars = s.toCharArray();
+        StringBuilder st = new StringBuilder();
+        for (int i = chars.length - 1; i >= 0; i--) {
+            st.append(chars[i]);
+            if ((chars.length - i) % 3 == 0 && i != 0) {
+                st.append(',');
+            }
+        }
+        return st.reverse().toString();
     }
 
 }
