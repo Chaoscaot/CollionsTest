@@ -15,8 +15,8 @@ public class Main extends Canvas {
 
 
     static BigInteger count = BigInteger.ZERO;
-    static int digits = 6;
-    static int timeSteps = (int)Math.pow(10, digits);
+    static int digits = 12;
+    static long timeSteps = (long)Math.pow(10, digits);
 
     public static void main(String[] args) {
         mainInstance = new Main();
@@ -24,7 +24,7 @@ public class Main extends Canvas {
 
     public Main() {
         block1 = new Block( 100 , 20, 0, 1);
-        block2 = new Block(600 , 20 + digits * 20, 1 , Math.pow(100, digits));
+        block2 = new Block(block1.x + block1.width * 5, 20 + digits * 20, 1 , Math.pow(100, digits));
 
         frame = new JFrame();
         frame.setTitle("LightChess");
@@ -77,12 +77,12 @@ public class Main extends Canvas {
         if (digits == 2) {
             addition++;
         }
-        int t = (int)(timeSteps * (1 / block1.distance(block2)) * (digits + addition));
+        long t = (long)(timeSteps * (1 / block1.distance(block2)) * (digits + addition));
         if (t <= 0) {
             t = 1;
         }
 
-        for (int i = 0; i < t; i++) {
+        for (long i = 0; i < t; i++) {
             block1.update(t);
             block2.update(t);
 
@@ -129,8 +129,9 @@ public class Main extends Canvas {
         g.drawString("            " + pi.substring(0, digits + 1), 10, 120 + height);
         g.setColor(Color.gray);
         g.drawString("            " + repeat(' ', digits + 1) + pi.substring(digits + 1), 10, 120 + height);
-        g.drawString("Timesteps:  " + (int)(timeSteps * (1 / block1.distance(block2)) * digits), 10, 140 + height);
+        g.drawString("Timesteps:  " + (long)(timeSteps * (1 / block1.distance(block2)) * digits), 10, 140 + height);
         g.drawString("            " + timeSteps, 10, 160 + height);
+        g.drawString("Digits:     " + digits, 10, 180 + height);
 
         g.dispose();
         bs.show();

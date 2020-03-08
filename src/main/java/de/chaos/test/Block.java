@@ -6,7 +6,7 @@ public class Block {
 
     public double v;
     public double m;
-    private double x;
+    public double x;
     public int width;
 
     public Block(double x, int width, double v, double m) {
@@ -39,8 +39,8 @@ public class Block {
         return newV;
     }
 
-    public void update(int timestep) {
-        this.x += this.v / (double)timestep;
+    public void update(long timeSteps) {
+        this.x += this.v / timeSteps;
     }
 
     public void draw(Graphics2D g, int height) {
