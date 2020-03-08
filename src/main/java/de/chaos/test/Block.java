@@ -7,7 +7,7 @@ public class Block {
     public double v;
     public double m;
     private double x;
-    private int width;
+    public int width;
 
     public Block(double x, int width, double v, double m) {
         this.v = v * -1;
@@ -43,8 +43,8 @@ public class Block {
         this.x += this.v / (double)timestep;
     }
 
-    public void draw(Graphics2D g){
+    public void draw(Graphics2D g, int height) {
         g.setColor(Color.gray);
-        g.fillRect((int)x,0, width, width);
+        g.fillRect((int)x,height - width, width, width);
     }
 }

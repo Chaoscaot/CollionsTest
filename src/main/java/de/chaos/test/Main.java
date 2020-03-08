@@ -13,7 +13,6 @@ public class Main extends Canvas {
 
     public static Main mainInstance;
 
-    private static double firstDistance;
 
     static BigInteger count = BigInteger.ZERO;
     static int digits = 6;
@@ -25,9 +24,7 @@ public class Main extends Canvas {
 
     public Main() {
         block1 = new Block( 100 , 20, 0, 1);
-        block2 = new Block(600 , 50, 1 , Math.pow(100, digits));
-
-        firstDistance = block1.distance(block2);
+        block2 = new Block(600 , 20 + digits * 20, 1 , Math.pow(100, digits));
 
         frame = new JFrame();
         frame.setTitle("LightChess");
@@ -76,8 +73,14 @@ public class Main extends Canvas {
     }
 
     public void tick() {
-        int t = (int)(timeSteps * (1 / block1.distance(block2)));
-        System.out.println(t);
+        int addition = 0;
+        if (digits == 2) {
+            addition++;
+        }
+        int t = (int)(timeSteps * (1 / block1.distance(block2)) * (digits + addition));
+        if (t <= 0) {
+            t = 1;
+        }
 
         for (int i = 0; i < t; i++) {
             block1.update(t);
@@ -110,12 +113,35 @@ public class Main extends Canvas {
         g.setColor(Color.lightGray);
         g.fillRect(0,0, frame.getWidth(), frame.getHeight());
 
-        block1.draw(g);
-        block2.draw(g);
+        g.setColor(new Color(20, 20, 20));
+        int height = block2.width + 10;
+        g.fillRect(0, height, frame.getWidth(), 2);
 
-        g.drawString("Collisions: " + count, 10, 100);
+        block1.draw(g, height);
+        block2.draw(g, height);
+
+        String pi = "3141592653589793238462643393279502884197169399375105";
+
+        g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 20));
+        g.drawString("Collisions: " + count, 10, 100 + height);
+        g.drawString("Pi:         ", 10, 120 + height);
+        g.setColor(Color.orange);
+        g.drawString("            " + pi.substring(0, digits + 1), 10, 120 + height);
+        g.setColor(Color.gray);
+        g.drawString("            " + repeat(' ', digits + 1) + pi.substring(digits + 1), 10, 120 + height);
+        g.drawString("Timesteps:  " + (int)(timeSteps * (1 / block1.distance(block2)) * digits), 10, 140 + height);
+        g.drawString("            " + timeSteps, 10, 160 + height);
 
         g.dispose();
         bs.show();
     }
+
+    private String repeat(char c, int repeat) {
+        StringBuilder st = new StringBuilder();
+        for (int i = 0; i < repeat; i++) {
+            st.append(c);
+        }
+        return st.toString();
+    }
+
 }
